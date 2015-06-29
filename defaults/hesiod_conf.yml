@@ -1,4 +1,0 @@
----
-hesiod_conf_lhs: '.hesiod'
-hesiod_conf_rhs: '.yourdomain.com'
-hesiod_conf_classes: 'IN'

@@ -9,7 +9,7 @@
 
 - name: Configure hesiod
   template:
-    src: hesiod.conf.j2
+    src: hesiod.conf
     dest: /etc/hesiod.conf
     owner: root
     group: root
@@ -60,7 +60,7 @@
   register: hesiod_53_authhelper
 
 - name: Take ssh auth helper from hesiod53 and put in location sshd expects
-  shell:  'cp {{ hesiod53_location }}/{{ hesiod_53_authhelper }} {{ sshd_conf_dns_authhelper }}'
+  shell:  'cp {{ hesiod_53_authhelper["stdout"] }} {{ sshd_conf_dns_authhelper }}'
 
 - name: Update permissions for auth helper
   shell: 'chmod 0755 {{ sshd_conf_dns_authhelper }} && chown root:root {{ sshd_conf_dns_authhelper }}'
