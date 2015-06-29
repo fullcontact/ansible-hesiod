@@ -11,16 +11,24 @@ Suggested to be used in conjunction with [hesiod53](https://github.com/fullconta
 Role Variables
 --------------
 
-You can find variable defaults in `defaults/*` however the ones you'll have to edit are `defaults/hesiod_conf.yml`
+You can find variable defaults in `defaults/main.yml`. Main ones you want to edit are
+
+
+# hesiod conf file
+hesiod_conf_lhs: '.hesiod'
+hesiod_conf_rhs: '.yourdomain.com'
+
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
-         - { role: fullcontact.hesiod }
+         - role: fullcontact.ansible-hesiod
+           hesiod_conf_lhs: '.hesiod'
+           hesiod_conf_rhs: '.yourdomain.com'
+
 
 License
 -------
