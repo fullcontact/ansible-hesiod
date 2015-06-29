@@ -13,22 +13,22 @@ Role Variables
 
 You can find variable defaults in `defaults/main.yml`. Main ones you want to edit are
 
-
-# hesiod conf file
+```
 hesiod_conf_lhs: '.hesiod'
 hesiod_conf_rhs: '.yourdomain.com'
+```
 
 
 Example Playbook
 ----------------
 
-
+```
     - hosts: servers
       roles:
          - role: fullcontact.ansible-hesiod
            hesiod_conf_lhs: '.hesiod'
            hesiod_conf_rhs: '.yourdomain.com'
-
+```
 
 License
 -------
