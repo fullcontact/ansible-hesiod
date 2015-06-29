@@ -25,7 +25,7 @@ Example Playbook
 ```
     - hosts: servers
       roles:
-         - role: fullcontact.ansible-hesiod
+         - role: riltsken.hesiod
            hesiod_conf_lhs: '.hesiod'
            hesiod_conf_rhs: '.yourdomain.com'
 ```
@@ -39,5 +39,7 @@ Author Information
 ------------------
 
 FullContact
+
 https://github.com/fullcontact/
+
 ops+hesiod53@fullcontact.com
