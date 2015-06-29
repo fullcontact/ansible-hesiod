@@ -1,2 +1,7 @@
 ---
-# defaults file for ansible-hesiod
+sshd_conf_dns_authhelper: /etc/ssh/authhelper.py
+hesiod53_location: /tmp/hesiod53
+- include: hesiod_conf.yml
+- include: nsswitch_conf.yml
+- include: sshd_conf.yml
+- include: sudoers_conf.yml

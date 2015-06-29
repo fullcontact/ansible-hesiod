@@ -1,2 +1,84 @@
 ---
-# tasks file for ansible-hesiod
+- name: Ensure dependency packages are installed
+  apt:
+    pkg: '{{ item }}'
+    state: latest
+  with_items:
+    - hesiod
+    - python-dnspython
+
+- name: Configure hesiod
+  template:
+    src: hesiod.conf.j2
+    dest: /etc/hesiod.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: PAM mkhomedir module
+  copy:
+    src: mkhomedir
+    dest: /usr/share/pam-configs/
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Update PAM
+
+- name: PAM allow broken shadow entries
+  command: 'sed -i "s/pam_unix.so[ ]*$/pam_unix.so broken_shadow/" /etc/pam.d/common-account'
+
+- name: PAM check session limits (interactive)
+  command: 'cat /etc/pam.d/common-session'
+  register: common_session
+
+- name: PAM apply session limits (interactive)
+  shell: 'echo session required pam_limits.so >> /etc/pam.d/common-session'
+  when: common_session.stdout.find('pam_limits') == -1
+
+- name: PAM check session limits (noninteractive)
+  command: 'cat /etc/pam.d/common-session-noninteractive'
+  register: common_session_noninteractive
+
+- name: PAM apply session limits (noninteractive)
+  shell: 'echo session required pam_limits.so >> /etc/pam.d/common-session-noninteractive'
+  when: common_session_noninteractive.stdout.find('pam_limits') == -1
+
+- name: Configure nsswitch.conf
+  template:
+    src: nsswitch.conf
+    dest: /etc/nsswitch.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install hesiod53 library to grab ssh dns authenticator
+  pip: name=hesiod53 version=0.1.0 virtualenv={{ hesiod53_location }}
+
+- name: Find ssh dns authenticator for use by sshd
+  shell: 'find {{ hesiod53_location }} | grep "hesiod53/ssh.py$"'
+  register: hesiod_53_authhelper
+
+- name: Take ssh auth helper from hesiod53 and put in location sshd expects
+  shell:  'cp {{ hesiod53_location }}/{{ hesiod_53_authhelper }} {{ sshd_conf_dns_authhelper }}'
+
+- name: Update permissions for auth helper
+  shell: 'chmod 0755 {{ sshd_conf_dns_authhelper }} && chown root:root {{ sshd_conf_dns_authhelper }}'
+
+- name: Configure ssh
+  template:
+    src: sshd.conf
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload ssh
+
+- name: Sudoers configuration
+  template:
+    src: sudoers.conf
+    dest: /etc/sudoers.d/admins
+    owner: root
+    group: root
+    mode: 0440

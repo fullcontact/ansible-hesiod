@@ -1,2 +1,6 @@
 ---
-# handlers file for ansible-hesiod
+- name: Reload ssh
+  service: name=ssh state=restarted
+
+- name: Update PAM
+  command: 'pam-auth-update --package'

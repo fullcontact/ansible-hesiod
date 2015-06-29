@@ -1,0 +1,18 @@
+---
+sshd_conf_port: 22
+sshd_conf_protocol: 2
+sshd_conf_host_keys:
+  - /etc/ssh/ssh_host_rsa_key
+  - /etc/ssh/ssh_host_dsa_key
+  - /etc/ssh/ssh_host_ecdsa_key
+  - /etc/ssh/ssh_host_ed25519_key
+sshd_conf_privilege_separation: yes
+sshd_conf_key_regen_interval: 3600
+sshd_conf_server_key_bits: 1024
+sshd_conf_syslog_facility: AUTH
+sshd_conf_log_level: INFO
+sshd_conf_login_grace_time: 120
+sshd_conf_permit_root_login: without-password
+sshd_conf_strict_mode: yes
+sshd_conf_print_motd: no
+sshd_conf_print_last_log: yes

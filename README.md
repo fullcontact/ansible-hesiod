@@ -11,6 +11,7 @@ Suggested to be used in conjunction with [hesiod53](https://github.com/fullconta
 Role Variables
 --------------
 
+You can find variable defaults in `defaults/*` however the ones you'll have to edit are `defaults/hesiod_conf.yml`
 
 Example Playbook
 ----------------
