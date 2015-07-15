@@ -6,6 +6,7 @@
   with_items:
     - hesiod
     - python-dnspython
+    - python-dev
 
 - name: Configure hesiod
   template:
