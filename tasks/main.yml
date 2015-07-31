@@ -3,10 +3,13 @@
   apt:
     pkg: '{{ item }}'
     state: latest
+    update-cache: yes
+    cache_valid_time: 86400
   with_items:
     - hesiod
     - python-dnspython
     - python-dev
+    - python-virtualenv
 
 - name: Configure hesiod
   template:
@@ -83,3 +86,6 @@
     owner: root
     group: root
     mode: 0440
+    
+- name: Update pam conf
+  shell: 'pam-auth-update --package'
