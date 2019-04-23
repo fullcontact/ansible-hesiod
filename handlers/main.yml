@@ -3,4 +3,4 @@
   service: name=ssh state=restarted
 
 - name: Update PAM
-  command: 'pam-auth-update --package'
+  shell: 'sed -i "/mkhomedir/d" /var/lib/pam/seen && pam-auth-update --package'
