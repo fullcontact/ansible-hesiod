@@ -1,15 +1,14 @@
 ---
 - name: Ensure dependency packages are installed
   apt:
-    pkg: '{{ item }}'
+    pkg: 
+      - hesiod
+      - python-dnspython
+      - python-dev
+      - python-virtualenv
     state: latest
     update-cache: yes
     cache_valid_time: 86400
-  with_items:
-    - hesiod
-    - python-dnspython
-    - python-dev
-    - python-virtualenv
 
 - name: Configure hesiod
   template:
@@ -30,7 +29,10 @@
     - Update PAM
 
 - name: PAM allow broken shadow entries
-  command: 'sed -i "s/pam_unix.so[ ]*$/pam_unix.so broken_shadow/" /etc/pam.d/common-account'
+  replace:
+    path: /etc/pam.d/common-account
+    regexp: 'pam_unix.so[ ]*$'
+    replace: 'pam_unix.so broken_shadow'
 
 - name: PAM check session limits (interactive)
   command: 'cat /etc/pam.d/common-session'
@@ -67,7 +69,11 @@
   shell:  'cp {{ hesiod_53_authhelper["stdout"] }} {{ sshd_conf_dns_authhelper }}'
 
 - name: Update permissions for auth helper
-  shell: 'chmod 0755 {{ sshd_conf_dns_authhelper }} && chown root:root {{ sshd_conf_dns_authhelper }}'
+  file:
+    path: "{{ sshd_conf_dns_authhelper }}"
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Configure ssh
   template:
@@ -89,3 +95,4 @@
     
 - name: Update pam conf
   shell: 'pam-auth-update --package'
+  
