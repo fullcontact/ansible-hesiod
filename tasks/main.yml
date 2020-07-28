@@ -3,9 +3,9 @@
   apt:
     pkg: 
       - hesiod
-      - python-dnspython
-      - python-dev
-      - python-virtualenv
+      - python3-dnspython
+      - python3-dev
+      - python3-virtualenv
     state: latest
     update-cache: yes
     cache_valid_time: 86400
