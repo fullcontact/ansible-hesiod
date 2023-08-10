@@ -1,0 +1,13 @@
+---
+
+- name: Git clone hesiod53 library to grab ssh dns authenticator
+  git: repo=https://github.com/fullcontact/hesiod53.git dest={{ hesiod53_location }} version="master"
+
+- name: Take ssh auth helper from hesiod53 and put in location sshd expects
+  copy:
+    src: "{{ hesiod53_location }}/hesiod53/ssh_python_3.py"
+    dest: "{{ sshd_conf_dns_authhelper }}"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: '0755'
