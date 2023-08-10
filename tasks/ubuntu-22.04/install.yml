@@ -1,0 +1,12 @@
+---
+
+- name: Ensure dependency packages are installed
+  apt:
+    pkg:
+      - hesiod
+      - python3-dnspython
+      - python3-dev
+      - python3-virtualenv
+    state: latest
+    update-cache: yes
+    cache_valid_time: 86400

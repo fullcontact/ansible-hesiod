@@ -1,0 +1,19 @@
+---
+
+- name: Install hesiod53 library to grab ssh dns authenticator
+  pip: name=hesiod53 version=0.1.0 virtualenv={{ hesiod53_location }}
+
+- name: Find ssh dns authenticator for use by sshd
+  shell: 'find {{ hesiod53_location }} | grep "hesiod53/ssh.py$"'
+  register: hesiod_53_authhelper
+
+- name: Take ssh auth helper from hesiod53 and put in location sshd expects
+  shell:  'cp {{ hesiod_53_authhelper["stdout"] }} {{ sshd_conf_dns_authhelper }}'
+
+- name: Update permissions for auth helper
+  file:
+    path: "{{ sshd_conf_dns_authhelper }}"
+    owner: root
+    group: root
+    mode: '0755'
+
